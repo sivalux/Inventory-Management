@@ -23,7 +23,6 @@ public class InventoryDetailRequest {
     @NotEmpty(message = "Quantity cannot be empty.")
     private Integer quantity;
 
-    // will be null for update api
     private LocalDate transactionDate;
 
     private String description;

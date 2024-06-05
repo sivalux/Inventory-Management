@@ -35,10 +35,10 @@ public interface InventoryService {
     InventoryResponse getInventoryById(final Integer productId);
 
     /**
-     * service method for get all inventories
+     * service method for get inventories by product name get all inventories
      * @param pageNo
      * @param pageSize
      * @return page response
      */
-    PageResponse getAllInventories(final Integer pageNo, final Integer pageSize);
+    PageResponse getAllInventories(final Integer pageNo, final Integer pageSize, final String productName);
 }

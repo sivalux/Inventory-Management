@@ -38,7 +38,9 @@ public class InventoryDetailController {
             Integer response = inventoryDetailService.addInventoryDetail(request);
             LOGGER.info("Inventory detail created successfully");
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -53,7 +55,9 @@ public class InventoryDetailController {
             Integer response = inventoryDetailService.deleteInventoryDetail(transactionId);
             LOGGER.info("Inventory detail deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -68,7 +72,9 @@ public class InventoryDetailController {
             InventoryDetailResponse response = inventoryDetailService.getInventoryDetailById(transactionId);
             LOGGER.info("Inventory detail retrieved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -99,7 +105,9 @@ public class InventoryDetailController {
             Integer response = inventoryDetailService.updateInventoryDetail(transactionId, request);
             LOGGER.info("Inventory detail updated successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }

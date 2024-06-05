@@ -6,10 +6,7 @@ import inventory_management.module.inventory.entity.Brand;
 import inventory_management.module.inventory.entity.Category;
 import inventory_management.module.inventory.entity.InventoryMaster;
 import inventory_management.module.inventory.entity.Supplier;
-import inventory_management.module.inventory.repository.BrandRepository;
-import inventory_management.module.inventory.repository.CategoryRepository;
-import inventory_management.module.inventory.repository.InventoryMasterRepository;
-import inventory_management.module.inventory.repository.SupplierRepository;
+import inventory_management.module.inventory.repository.*;
 import inventory_management.module.inventory.service.InventoryService;
 import inventory_management.util.PageResponse;
 import org.modelmapper.ModelMapper;
@@ -123,9 +120,6 @@ public class InventoryServiceImpl implements InventoryService {
         if(!inventoryMaster.isPresent()){
             throw new IllegalArgumentException("Not found any product for given productId : "+productId);
         }
-//        BrandCategorySupplierResponse brandResponse = modelMapper.map(inventoryMaster.get().getBrandId(),BrandCategorySupplierResponse.class);
-//        BrandCategorySupplierResponse categoryResponse = modelMapper.map(inventoryMaster.get().getCategoryId(),BrandCategorySupplierResponse.class);
-//        BrandCategorySupplierResponse supplierResponse = modelMapper.map(inventoryMaster.get().getSupplierId(),BrandCategorySupplierResponse.class);
         InventoryResponse inventoryResponse = new InventoryResponse(inventoryMaster.get());
         return inventoryResponse;
     }
@@ -137,8 +131,13 @@ public class InventoryServiceImpl implements InventoryService {
      * @return page response
      */
     @Override
-    public PageResponse getAllInventories(Integer pageNo, Integer pageSize) {
-        Page<InventoryMaster> inventoryResponsePage = inventoryMasterRepository.findAll(PageRequest.of(pageNo-1,pageSize));
+    public PageResponse getAllInventories(Integer pageNo, Integer pageSize, String productName) {
+        Page<InventoryMaster> inventoryResponsePage;
+        if(productName != null){
+            inventoryResponsePage = inventoryMasterRepository.findByNameContaining(productName,PageRequest.of(pageNo-1,pageSize));
+        }else {
+            inventoryResponsePage = inventoryMasterRepository.findAll(PageRequest.of(pageNo-1,pageSize));
+        }
         List<InventoryResponse> inventoryResponseList = inventoryResponsePage.getContent().stream()
                 .map(inventoryMaster -> new InventoryResponse(inventoryMaster))
                 .collect(Collectors.toList());

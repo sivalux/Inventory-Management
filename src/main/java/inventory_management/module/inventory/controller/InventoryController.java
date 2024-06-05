@@ -53,7 +53,9 @@ public class InventoryController {
             Integer response = inventoryService.updateInventory(productId, request);
             LOGGER.info("Inventory updated successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        }catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -68,7 +70,9 @@ public class InventoryController {
             Integer response = inventoryService.deleteInventory(productId);
             LOGGER.info("Inventory deleted successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -83,7 +87,9 @@ public class InventoryController {
             InventoryResponse response = inventoryService.getInventoryById(productId);
             LOGGER.info("Inventory retrieved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponseModel(new Date(), ex.getMessage()));
+        }catch (Exception e) {
             LOGGER.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponseModel(new Date(), e.getMessage()));
         }
@@ -94,9 +100,10 @@ public class InventoryController {
             @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = PageResponse.class))})
     @GetMapping
     public ResponseEntity<?> getAllInventories( @RequestParam(value = "pageNo", required = true) Integer pageNo,
-                                                @RequestParam(value = "pageSize", required = true) Integer pageSize) {
+                                                @RequestParam(value = "pageSize", required = true) Integer pageSize,
+                                                @RequestParam(value = "productName", required = false) String productName) {
         try {
-            PageResponse response = inventoryService.getAllInventories(pageNo,pageSize);
+            PageResponse response = inventoryService.getAllInventories(pageNo,pageSize,productName);
             LOGGER.info("Inventories retrieved successfully");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
