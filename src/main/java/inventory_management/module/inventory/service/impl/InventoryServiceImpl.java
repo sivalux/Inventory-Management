@@ -68,7 +68,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public Integer updateInventory(Integer productId, InventoryRequest request) {
         Optional<InventoryMaster> inventoryMaster = inventoryMasterRepository.findById(productId);
-        if(!inventoryMaster.isPresent()){
+        if(inventoryMaster.isEmpty()){
             throw new IllegalArgumentException("Not found any product for given productId : "+productId);
         }
         modelMapper.map(request, inventoryMaster.get());
@@ -79,15 +79,15 @@ public class InventoryServiceImpl implements InventoryService {
 
     private InventoryMaster validateInventoryFields(InventoryRequest request, InventoryMaster inventoryMaster){
         Optional<Brand> brand = brandRepository.findById(request.getBrandId());
-        if(!brand.isPresent()){
+        if(brand.isEmpty()){
             throw new IllegalArgumentException("Not found any brand for given brandId : "+request.getBrandId());
         }
         Optional<Category> category = categoryRepository.findById(request.getCategoryId());
-        if(!category.isPresent()){
+        if(category.isEmpty()){
             throw new IllegalArgumentException("Not found any category for given categoryId : "+request.getCategoryId());
         }
         Optional<Supplier> supplier = supplierRepository.findById(request.getSupplierId());
-        if(!supplier.isPresent()){
+        if(supplier.isEmpty()){
             throw new IllegalArgumentException("Not found any supplier for given supplierId : "+request.getSupplierId());
         }
         inventoryMaster.setBrandId(brand.get());

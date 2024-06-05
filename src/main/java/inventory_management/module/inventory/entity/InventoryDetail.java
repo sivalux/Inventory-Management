@@ -23,7 +23,6 @@ public class InventoryDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Setter(AccessLevel.NONE)
     @Column(name = "transaction_id")
     private Integer transactionId;
 

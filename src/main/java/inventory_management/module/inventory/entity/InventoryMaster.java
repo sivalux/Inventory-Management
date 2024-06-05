@@ -19,7 +19,6 @@ public class InventoryMaster {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Setter(AccessLevel.NONE)
     @Column(name = "product_id")
     private Integer productId;
 

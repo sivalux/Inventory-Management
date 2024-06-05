@@ -53,7 +53,7 @@ public class InventoryDetailServiceImpl implements InventoryDetailService {
             throw new IllegalArgumentException("Invalid transaction status");
         }
         Optional<InventoryMaster> inventoryMaster = inventoryMasterRepository.findById(request.getProductId());
-        if(!inventoryMaster.isPresent()){
+        if(inventoryMaster.isEmpty()){
             throw new IllegalArgumentException("Not found any product for given productId : "+request.getProductId());
         }
         InventoryDetail inventoryDetail = modelMapper.map(request, InventoryDetail.class);
@@ -120,7 +120,7 @@ public class InventoryDetailServiceImpl implements InventoryDetailService {
     @Transactional
     public Integer updateInventoryDetail(Integer transactionId, InventoryDetailRequest request) {
         Optional<InventoryDetail> inventoryDetail = inventoryDetailRepository.findById(transactionId);
-        if(!inventoryDetail.isPresent()){
+        if(inventoryDetail.isEmpty()){
             throw new IllegalArgumentException("Not found any transaction for given transactionId : "+transactionId);
         }
         InventoryMaster inventoryMaster = inventoryDetail.get().getProductId();
@@ -141,7 +141,7 @@ public class InventoryDetailServiceImpl implements InventoryDetailService {
                 inventoryMaster.setStockInHand(inventoryMaster.getStockInHand() + request.getQuantity());
             }
         }
-
+        System.out.println(inventoryMaster.getStockInHand());
         inventoryMasterRepository.save(inventoryMaster);
 
         modelMapper.map(request, inventoryDetail);
